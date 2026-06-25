@@ -2,12 +2,13 @@
   "manifest_schema_version": 3,
   "sdk_version": "5.7.3",
   "app_id": "web-search",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "name": "Web Search",
   "description": "Live web research for Webbee — search the web and read pages into clean Markdown. System capability: available to every chat, no setup.",
   "icon": "icon.svg",
   "actions_explicit": true,
   "system": true,
+  "hidden_in_sidebar": true,
   "capabilities": [
     "store:read",
     "store:write"

@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.0.4] — 2026-06-25 — Hide sidebar icon the RIGHT way: manifest `hidden_in_sidebar: true`
+
+The v1.0.1–1.0.3 attempts fought the sidebar tile via panel slots (`left` → `overlay`). That was the
+wrong lever: the Imperal Panel suppresses a tile only when the kernel publishes the app into the
+`imperal:hidden_in_sidebar_apps` Redis set, and `publish_hidden_in_sidebar_apps` adds an app there
+ONLY when its `imperal.json` declares BOTH `system: true` AND `hidden_in_sidebar: true`. We had only
+`system: true` → the icon stayed visible everywhere.
+
+- `imperal.json` → added top-level `"hidden_in_sidebar": true` (next to `"system": true`). Manifest-only
+  field — the SDK `Extension(...)` ctor does not expose it (mirrors `marketplace`, the only other
+  hidden system app). Honoured by SDK validator V32 because `system: true` is set.
+
+On deploy, the catalog-invalidation pub/sub triggers `publish_hidden_in_sidebar_apps`, web-search lands
+in the Redis set, and the gateway drops its sidebar tile.
+
 ## [1.0.3] — 2026-06-25 — Hide sidebar icon: panel moved to `overlay` slot
 
 This is an admin/system extension — it must NOT show a sidebar launcher icon. The v1.0.2 panel used

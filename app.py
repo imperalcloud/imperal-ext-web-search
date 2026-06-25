@@ -5,6 +5,11 @@ tools that call the web-tools-api backend. `system=True` marks it platform-manag
 hidden from marketplace, not uninstallable). NOTE: the Dev Portal gates `system=True` behind a
 first-party author allowlist — until SeeU is allowlisted, flip to `system=False` to test-deploy as
 a normal (iconless) extension; the code is otherwise identical.
+
+Hiding the Imperal Panel SIDEBAR TILE is a SEPARATE flag: `hidden_in_sidebar: true` in
+imperal.json (manifest-only — the SDK Extension ctor does not expose it; honoured by the kernel
+publish_hidden_in_sidebar_apps scan only when system=true is also set). `system=True` alone keeps
+the tile visible — both flags are required to remove the icon.
 """
 from __future__ import annotations
 
@@ -17,7 +22,7 @@ from imperal_sdk.chat import ChatExtension
 
 ext = Extension(
     "web-search",
-    version="1.0.3",
+    version="1.0.4",
     display_name="Web Search",
     description=(
         "Live web research for Webbee — search the web and read pages into clean Markdown. "
