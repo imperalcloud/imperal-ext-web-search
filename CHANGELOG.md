@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.0.1] — 2026-06-25 — Add required @ext.skeleton (fix: tools not registering)
+
+The v1.0.0 extension had NO `@ext.skeleton` — every other Imperal extension (all `imperal-ext-*`
++ web-tools) declares one, and its `skeleton_refresh_*` tool is the platform's per-extension
+registration/status anchor. Without it the platform didn't surface the extension's tools.
+
+- Added `skeleton.py` → `@ext.skeleton("web_search")` (tool `skeleton_refresh_web_search`), returns
+  the per-user heavy-read policy (scalars, ttl=300). Registered in `main.py`.
+- Manifest now: `skeleton_refresh_web_search` + 5 chat functions (matches the working ext shape).
+
 ## [1.0.0] — 2026-06-25 — Initial: hidden system web-research extension
 
 Extracted from `web-tools` into its own standalone **hidden system extension** (`system=True`,

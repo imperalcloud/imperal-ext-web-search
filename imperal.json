@@ -2,7 +2,7 @@
   "manifest_schema_version": 3,
   "sdk_version": "5.7.3",
   "app_id": "web-search",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "Web Search",
   "description": "Live web research for Webbee — search the web and read pages into clean Markdown. System capability: available to every chat, no setup.",
   "icon": "icon.svg",
@@ -13,6 +13,12 @@
     "store:write"
   ],
   "tools": [
+    {
+      "name": "skeleton_refresh_web_search",
+      "description": "Web Search status — the user's heavy-read policy (ask/always/never_heavy). Web research works with no setup: web_search to find pages, read_url to read them.",
+      "scopes": [],
+      "parameters": {}
+    },
     {
       "name": "web_search",
       "description": "WEB SEARCH — find pages for a query. FIRST step of any web research: returns candidate cards (url, title, snippet, score) but does NOT read page content. The `snippet` is an LLM-ready excerpt and is OFTEN ENOUGH to answer — read pages only when you need more. Then read just the 2–3 BEST urls (not all results). For 'today'/'latest'/'recent' queries you MUST pass recency_days. Use include_domains to focus a site, category to bias content type. Re-run with new wording if thin.",
