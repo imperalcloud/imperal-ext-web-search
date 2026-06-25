@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.2] — 2026-06-25 — Add sidebar panel (deploy gate: "Panels registered")
+
+Deploy validation required a left-slot panel ("extension won't appear in sidebar"). Added a minimal
+DUI sidebar panel — web-research status + one-tap heavy-read policy switch (ask/always/never_heavy,
+calls set_web_read_policy, refreshes on web_read_policy.changed). Extension is no longer fully hidden
+(has a sidebar surface) — accepted trade-off to pass deploy 11/11.
+
+- `panels.py` → `@ext.panel("sidebar", slot="left", title="Web Search")`. Registered in `main.py`.
+
 ## [1.0.1] — 2026-06-25 — Add required @ext.skeleton (fix: tools not registering)
 
 The v1.0.0 extension had NO `@ext.skeleton` — every other Imperal extension (all `imperal-ext-*`

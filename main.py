@@ -11,7 +11,7 @@ sys.path.insert(0, _dir)
 
 for _m in list(sys.modules):
     if _m in ("app", "backend", "schemas_sdl", "schemas_sdl_builders",
-              "handlers_search", "skeleton"):
+              "handlers_search", "skeleton", "panels"):
         del sys.modules[_m]
 
 from app import ext, chat    # noqa: F401
@@ -23,3 +23,4 @@ import schemas_sdl_builders   # noqa: F401
 import backend                # noqa: F401
 import handlers_search        # noqa: F401
 import skeleton               # noqa: F401
+import panels                 # noqa: F401

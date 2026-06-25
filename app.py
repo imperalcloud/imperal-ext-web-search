@@ -17,7 +17,7 @@ from imperal_sdk.chat import ChatExtension
 
 ext = Extension(
     "web-search",
-    version="1.0.1",
+    version="1.0.2",
     display_name="Web Search",
     description=(
         "Live web research for Webbee — search the web and read pages into clean Markdown. "
