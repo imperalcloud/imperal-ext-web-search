@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.3] — 2026-06-25 — Hide sidebar icon: panel moved to `overlay` slot
+
+This is an admin/system extension — it must NOT show a sidebar launcher icon. The v1.0.2 panel used
+`slot="left"`, which surfaces a launcher. Moved it to `slot="overlay"` (panel_id `status`): the panel
+stays registered (deploy "Panels registered" still passes) but `overlay` panels open on-demand and
+create NO persistent sidebar icon. The extension is hidden again.
+
 ## [1.0.2] — 2026-06-25 — Add sidebar panel (deploy gate: "Panels registered")
 
 Deploy validation required a left-slot panel ("extension won't appear in sidebar"). Added a minimal

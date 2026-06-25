@@ -1,7 +1,10 @@
-"""web-search · sidebar panel (DUI) — status + heavy-read policy switch.
+"""web-search · status panel (DUI) — status + heavy-read policy switch.
 
-Minimal left-slot panel so the extension registers a sidebar surface (platform deploy gate).
-Shows that web research is active and lets the user flip the heavy-read policy in one tap.
+This is an ADMIN/SYSTEM extension — it must stay HIDDEN (no sidebar launcher icon). But the deploy
+validator requires at least one registered panel. So we register ONE panel in the `overlay` slot:
+`overlay` panels are opened on-demand (not a persistent left/right sidebar launcher), so the manifest
+has a panel (deploy "Panels registered" passes) while NO icon appears in the sidebar. Do NOT move this
+to slot="left"/"right" — that would surface a launcher icon, which this system app must not have.
 """
 from __future__ import annotations
 
@@ -26,10 +29,10 @@ async def _policy(ctx) -> str:
     return "ask"
 
 
-@ext.panel("sidebar", slot="left", title="Web Search", icon="Search",
+@ext.panel("status", slot="overlay", title="Web Search",
            refresh="on_event:web_read_policy.changed")
-async def panel_sidebar(ctx, **kwargs) -> ui.UINode:
-    """Left panel — web-research status + one-tap heavy-read policy switch."""
+async def panel_status(ctx, **kwargs) -> ui.UINode:
+    """Overlay panel — web-research status + one-tap heavy-read policy switch (no sidebar icon)."""
     policy = await _policy(ctx)
 
     def _btn(key: str, label: str) -> ui.UINode:
