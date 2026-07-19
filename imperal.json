@@ -1,6 +1,6 @@
 {
   "manifest_schema_version": 3,
-  "sdk_version": "5.7.3",
+  "sdk_version": "5.9.12",
   "app_id": "web-search",
   "version": "1.0.4",
   "name": "Web Search",
@@ -1371,7 +1371,10 @@
       "panel_id": "status",
       "slot": "overlay",
       "title": "Web Search",
-      "tree": {}
+      "tree": {},
+      "icon": "",
+      "refresh": "on_event:web_read_policy.changed",
+      "center_overlay": false
     }
   ]
 }
