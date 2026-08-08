@@ -22,7 +22,7 @@ from imperal_sdk.chat import ChatExtension
 
 ext = Extension(
     "web-search",
-    version="1.0.4",
+    version="1.1.0",
     display_name="Web Search",
     description=(
         "Live web research for Webbee — search the web and read pages into clean Markdown. "
@@ -47,10 +47,15 @@ chat = ChatExtension(
         "web_search=find pages for a query (candidate cards url+title+snippet; does NOT read them); "
         "read_url=cheap reader, ONE page → clean Markdown (always try first; supports mode for token economy: "
         "metadata/outline to triage, full/tables on winners); "
+        "read_urls=SEVERAL pages in ONE call, read concurrently — use this whenever you want 2+ pages "
+        "(the normal case after web_search) instead of chaining read_url; max_tokens is the budget for the "
+        "WHOLE batch and is split across the URLs, so more URLs means a smaller slice each, and one dead "
+        "link never sinks the others; "
         "read_url_rendered=⚠️TOKEN-HEAVY headless-Chromium reader for JS/bot-protected pages; "
         "read_document=⚠️TOKEN-HEAVY reader for Office docs (.docx/.xlsx/.pptx); "
         "set_web_read_policy=remember the user's heavy-read preference (ask/always/never_heavy). "
-        "Loop: web_search → pick the 2–3 best url(s) → read_url each; if read_url errors, read the NEXT "
+        "Loop: web_search → pick the 2–3 best url(s) → read_urls them in ONE call (read_url only when it is "
+        "genuinely a single page); if a read errors, read the NEXT "
         "candidate; for 'today/latest' pass recency_days. If read_url says a page is blocked or is an Office "
         "doc, surface what you already found and ASK before using the heavy readers — unless policy is 'always'. "
         "Each read returns content_hash — don't re-ingest identical content you already read this conversation."

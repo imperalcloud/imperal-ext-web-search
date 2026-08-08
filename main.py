@@ -22,5 +22,6 @@ import schemas_sdl_builders   # noqa: F401
 
 import backend                # noqa: F401
 import handlers_search        # noqa: F401
+import handlers_bulk          # noqa: F401  read_urls — several pages concurrently, one token budget
 import skeleton               # noqa: F401
 import panels                 # noqa: F401
