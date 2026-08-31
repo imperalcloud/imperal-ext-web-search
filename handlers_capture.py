@@ -66,10 +66,11 @@ async def fn_capture_page(ctx, params: CapturePageParams) -> ActionResult:
         resp = await ctx.http.post(f"{WEB_SEARCH_API_URL}/v1/capture", json=body, timeout=60)
     except Exception as exc:
         return ActionResult.error(
-            f"Could not reach the capture service for {params.url} ({exc}).", retryable=True)
+            f"Could not reach the capture service for {params.url} ({exc}).",
+            retryable=True, code="CAPTURE_SERVICE_UNREACHABLE")
     data, err = unwrap(resp, "Page capture failed")
     if err:
-        return ActionResult.error(err, retryable=True)
+        return ActionResult.error(err, retryable=True, code="CAPTURE_BACKEND_ERROR")
 
     facts = {
         "url": data.get("url"), "final_url": data.get("final_url"),
