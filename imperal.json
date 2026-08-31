@@ -1,6 +1,6 @@
 {
   "manifest_schema_version": 3,
-  "sdk_version": "5.9.13",
+  "sdk_version": "5.13.1",
   "app_id": "web-search",
   "version": "1.1.0",
   "name": "Web Search",
@@ -1350,6 +1350,511 @@
         "x-sdl": "entity"
       },
       "event": "web_read_policy.changed",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_web_search_chat"
+    },
+    {
+      "name": "capture_page",
+      "description": "SEE a web page — real screenshot + machine FACTS from a headless Chromium on the api-server (webbee-eyes cloud tier, for panel/Telegram — the terminal uses its local webbee-eyes organ instead). Returns console errors, failed requests, an accessibility role tree (also your click/type targeting map), page meta and, unless with_screenshot=false, a file_id whose screenshot you can READ with file-reader read_files (ai_vision). Optional pre-capture actions (click/type/press/scroll/wait/waitfor/goto/eval) run on the SAME page, so you can log into a form or open a tab before the shot. Use to VERIFY what you built, to check how a page really looks, or to debug layout — never as a text reader (read_url is for content).",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "description": "Capture-page parameters.",
+        "properties": {
+          "url": {
+            "description": "URL to capture (http/https, public target).",
+            "minLength": 1,
+            "title": "Url",
+            "type": "string"
+          },
+          "viewport": {
+            "default": "desktop",
+            "description": "Screen shape: desktop 1920x1080, laptop 1366x768, tablet 768x1024, mobile 390x844.",
+            "enum": [
+              "desktop",
+              "laptop",
+              "tablet",
+              "mobile"
+            ],
+            "title": "Viewport",
+            "type": "string"
+          },
+          "full_page": {
+            "default": false,
+            "description": "True = full scroll-height capture (bigger PNG, slower).",
+            "title": "Full Page",
+            "type": "boolean"
+          },
+          "wait_ms": {
+            "default": 0,
+            "description": "Extra settle delay before the screenshot (max 10s).",
+            "maximum": 10000,
+            "minimum": 0,
+            "title": "Wait Ms",
+            "type": "integer"
+          },
+          "actions": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional pre-screenshot actions on the SAME page, in order — [{type:click|type|press|scroll|wait|waitfor|goto|eval, ...}] — e.g. [{\"type\":\"type\",\"selector\":\"#email\",\"text\":\"a@b.c\"},{\"type\":\"click\",\"selector\":\"button\"}]. Stops at the first failing action; the log lands in the result.",
+            "title": "Actions"
+          },
+          "with_screenshot": {
+            "default": true,
+            "description": "True: upload the PNG into File Reader (returns file_id; ai_vision reads it back via read_files). False: facts-only (console/network/a11y/meta).",
+            "title": "With Screenshot",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "title": "CapturePageParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "description": "A page read into clean Markdown + extraction metadata.",
+        "properties": {
+          "id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              }
+            ],
+            "title": "Id"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "kind": {
+            "default": "page_content",
+            "title": "Kind",
+            "type": "string"
+          },
+          "subtitle": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Subtitle"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Description"
+          },
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Status"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Url",
+            "x-sdl-role": "ws.url"
+          },
+          "final_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Final Url",
+            "x-sdl-role": "ws.final_url"
+          },
+          "content": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Content",
+            "x-sdl-role": "ws.content"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Source",
+            "x-sdl-role": "ws.source"
+          },
+          "content_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Content Type",
+            "x-sdl-role": "ws.content_type"
+          },
+          "lang": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Lang",
+            "x-sdl-role": "ws.lang"
+          },
+          "token_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Token Count",
+            "x-sdl-role": "ws.token_count"
+          },
+          "word_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Word Count",
+            "x-sdl-role": "ws.word_count"
+          },
+          "truncated": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Truncated",
+            "x-sdl-role": "ws.truncated"
+          },
+          "content_hash": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Content Hash",
+            "x-sdl-role": "ws.content_hash"
+          },
+          "outline": {
+            "anyOf": [
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Outline",
+            "x-sdl-role": "ws.outline"
+          },
+          "tables": {
+            "anyOf": [
+              {
+                "items": {},
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Tables",
+            "x-sdl-role": "ws.tables"
+          },
+          "page_metadata": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Page Metadata",
+            "x-sdl-role": "ws.page_metadata"
+          }
+        },
+        "required": [
+          "id",
+          "title"
+        ],
+        "title": "PageContent",
+        "type": "object",
+        "x-sdl": "entity"
+      },
+      "event": "",
+      "background": false,
+      "long_running": false,
+      "scopes": [],
+      "owner_chat_tool": "tool_web_search_chat"
+    },
+    {
+      "name": "read_urls",
+      "description": "READ SEVERAL web pages in ONE call, concurrently — the bulk form of read_url. Use this whenever you want more than one page (e.g. the top 3 results of a search): it is much faster than calling read_url repeatedly. TOKEN ECONOMY: max_tokens is the budget for the WHOLE batch and is split across the pages, and mode defaults to 'main' (prose only) — use mode='outline' or 'metadata' to triage many candidates cheaply before a full read. Pass `query` to focus every extraction on your actual question. Dead or blocked links are reported per URL and never discard the pages that did read; if an important page comes back blocked, fall back to the single-page read_url for it, which can escalate to the heavy readers.",
+      "action_type": "read",
+      "chain_callable": true,
+      "effects": [],
+      "id_projection": "",
+      "params_schema": {
+        "description": "Read SEVERAL pages in one call.",
+        "properties": {
+          "urls": {
+            "description": "The pages to read (http/https), up to 10. They are fetched CONCURRENTLY, so this is much faster than calling read_url once per page — always prefer it when you have several candidates from a search.",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 10,
+            "minItems": 1,
+            "title": "Urls",
+            "type": "array"
+          },
+          "max_tokens": {
+            "default": 12000,
+            "description": "Token budget for the WHOLE batch, split across the URLs — NOT per page. Reading more pages shrinks each page's slice rather than multiplying the total cost.",
+            "maximum": 48000,
+            "minimum": 1000,
+            "title": "Max Tokens",
+            "type": "integer"
+          },
+          "query": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "description": "Optional: the question you are trying to answer. Extraction is focused on it, which makes each page's smaller slice far more useful. Pass it whenever you have one.",
+            "title": "Query"
+          },
+          "mode": {
+            "default": "main",
+            "description": "TOKEN ECONOMY — what to return per page. Defaults to 'main' (prose only), which is the right choice for almost every batch. Use 'outline' or 'metadata' to triage many candidates cheaply before a full read of the one that matters; 'full' only for a small batch you genuinely need in full.",
+            "enum": [
+              "full",
+              "main",
+              "outline",
+              "tables",
+              "metadata"
+            ],
+            "title": "Mode",
+            "type": "string"
+          }
+        },
+        "required": [
+          "urls"
+        ],
+        "title": "ReadUrlsParams",
+        "type": "object"
+      },
+      "return_schema": {
+        "$defs": {
+          "BulkPageResult": {
+            "additionalProperties": true,
+            "description": "One page's outcome inside a batch.\n\n`outline` and `tables` are carried alongside `content` because the cheap\ntriage modes return their payload in those keys and leave `content`\nempty — dropping them would make mode='outline'/'tables' silently\nuseless in a batch, which is exactly the mode a multi-URL read wants.",
+            "properties": {
+              "url": {
+                "default": "",
+                "title": "Url",
+                "type": "string"
+              },
+              "ok": {
+                "default": false,
+                "title": "Ok",
+                "type": "boolean"
+              },
+              "title": {
+                "default": "",
+                "title": "Title",
+                "type": "string"
+              },
+              "content": {
+                "default": "",
+                "title": "Content",
+                "type": "string"
+              },
+              "token_count": {
+                "default": 0,
+                "title": "Token Count",
+                "type": "integer"
+              },
+              "content_hash": {
+                "default": "",
+                "title": "Content Hash",
+                "type": "string"
+              },
+              "outline": {
+                "anyOf": [
+                  {
+                    "items": {},
+                    "type": "array"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Outline"
+              },
+              "tables": {
+                "anyOf": [
+                  {
+                    "items": {},
+                    "type": "array"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Tables"
+              },
+              "error": {
+                "default": "",
+                "title": "Error",
+                "type": "string"
+              }
+            },
+            "title": "BulkPageResult",
+            "type": "object"
+          }
+        },
+        "additionalProperties": true,
+        "description": "Combined outcome of a bulk read.",
+        "properties": {
+          "pages": {
+            "items": {
+              "$ref": "#/$defs/BulkPageResult"
+            },
+            "title": "Pages",
+            "type": "array"
+          },
+          "succeeded": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Succeeded",
+            "type": "array"
+          },
+          "failed": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Failed",
+            "type": "array"
+          },
+          "total": {
+            "default": 0,
+            "title": "Total",
+            "type": "integer"
+          },
+          "success_count": {
+            "default": 0,
+            "title": "Success Count",
+            "type": "integer"
+          },
+          "failure_count": {
+            "default": 0,
+            "title": "Failure Count",
+            "type": "integer"
+          },
+          "total_tokens": {
+            "default": 0,
+            "title": "Total Tokens",
+            "type": "integer"
+          }
+        },
+        "title": "BulkReadResult",
+        "type": "object"
+      },
+      "event": "",
       "background": false,
       "long_running": false,
       "scopes": [],
