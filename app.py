@@ -52,6 +52,8 @@ chat = ChatExtension(
         "WHOLE batch and is split across the URLs, so more URLs means a smaller slice each, and one dead "
         "link never sinks the others; "
         "read_url_rendered=⚠️TOKEN-HEAVY headless-Chromium reader for JS/bot-protected pages; "
+        "capture_page=SEE a page — real screenshot + console/a11y/network FACTS (webbee-eyes cloud tier; "
+        "screenshot lands in File Reader, read it back with file-reader read_files); "
         "read_document=⚠️TOKEN-HEAVY reader for Office docs (.docx/.xlsx/.pptx); "
         "set_web_read_policy=remember the user's heavy-read preference (ask/always/never_heavy). "
         "Loop: web_search → pick the 2–3 best url(s) → read_urls them in ONE call (read_url only when it is "
